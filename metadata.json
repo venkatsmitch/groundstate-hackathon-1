@@ -1,0 +1,9 @@
+{
+  "name": "Optum Health Portal",
+  "description": "Enterprise-grade health monitoring and wellness index for UnitedHealth Group members.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone",
+    "geolocation"
+  ]
+}
