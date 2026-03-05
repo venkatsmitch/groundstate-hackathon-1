@@ -37,10 +37,10 @@ export const TargetSetter: React.FC<TargetSetterProps> = ({
   };
 
   const getScoreColor = (score: number) => {
-    if (score >= 85) return '#10B981';
-    if (score >= 70) return '#3B82F6';
-    if (score >= 55) return '#F59E0B';
-    return '#EF4444';
+    if (score >= 85) return '#34d399'; // play-mint
+    if (score >= 70) return '#60a5fa'; // play-blue
+    if (score >= 55) return '#fbbf24'; // play-yellow
+    return '#f472b6'; // play-pink
   };
 
   const activeColor = getScoreColor(targetScore);
@@ -48,13 +48,13 @@ export const TargetSetter: React.FC<TargetSetterProps> = ({
   return (
     <div className="space-y-8">
       {/* Playful Target Card */}
-      <div className="play-card p-10 relative overflow-hidden group">
-        <div className="absolute -right-10 -top-10 w-40 h-40 bg-play-purple/5 rounded-full blur-3xl" />
+      <div className="play-card p-10 relative overflow-hidden group bg-play-card border-play-border">
+        <div className="absolute -right-10 -top-10 w-40 h-40 bg-play-purple/10 rounded-full blur-3xl" />
         
         <div className="flex justify-between items-start mb-10 relative z-10">
           <div>
             <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-play-purple mb-2">Set Your Target</h3>
-            <p className="text-sm text-slate-400 font-bold">Dream big! Where do you want to be?</p>
+            <p className="text-sm text-play-muted font-bold">Dream big! Where do you want to be?</p>
           </div>
           <div className="text-right">
             <motion.span 
@@ -65,14 +65,14 @@ export const TargetSetter: React.FC<TargetSetterProps> = ({
             >
               {targetScore}
             </motion.span>
-            <div className="mt-2 inline-flex items-center gap-1 px-3 py-1 bg-play-green/10 text-play-green rounded-full text-[10px] font-black uppercase tracking-widest">
+            <div className="mt-2 inline-flex items-center gap-1 px-3 py-1 bg-play-mint/10 text-play-mint rounded-full text-[10px] font-black uppercase tracking-widest">
               <span>+{Math.round(targetScore - currentScore)} pts</span>
             </div>
           </div>
         </div>
 
         <div className="relative h-12 flex items-center group">
-          <div className="absolute w-full h-4 bg-slate-100 rounded-full overflow-hidden border-2 border-white shadow-inner">
+          <div className="absolute w-full h-4 bg-play-elevated rounded-full overflow-hidden border-2 border-play-border shadow-inner">
             <motion.div 
               className="h-full"
               initial={false}
@@ -91,7 +91,7 @@ export const TargetSetter: React.FC<TargetSetterProps> = ({
             className="absolute w-full h-full opacity-0 cursor-pointer z-10"
           />
           <motion.div 
-            className="absolute w-10 h-10 bg-white rounded-2xl shadow-2xl border-4 pointer-events-none flex items-center justify-center text-xl"
+            className="absolute w-10 h-10 bg-play-ink rounded-2xl shadow-2xl border-4 pointer-events-none flex items-center justify-center text-xl"
             style={{ borderColor: activeColor }}
             animate={{ 
               left: `calc(${((targetScore - currentScore) / (99 - currentScore)) * 100}% - 20px)` 
@@ -104,8 +104,8 @@ export const TargetSetter: React.FC<TargetSetterProps> = ({
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div className="play-card p-8">
-          <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-6">Focus Areas</h3>
+        <div className="play-card p-8 bg-play-card border-play-border">
+          <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-play-muted mb-6">Focus Areas</h3>
           <div className="grid grid-cols-4 gap-3">
             {categories.map((cat) => {
               const isActive = priority.includes(cat.id);
@@ -116,7 +116,7 @@ export const TargetSetter: React.FC<TargetSetterProps> = ({
                   className={`flex flex-col items-center gap-2 p-4 rounded-2xl border-2 transition-all ${
                     isActive 
                       ? 'bg-play-purple border-play-purple text-white shadow-lg shadow-play-purple/20' 
-                      : 'bg-white border-slate-50 text-slate-300 hover:border-play-purple/20'
+                      : 'bg-play-elevated border-play-border text-play-muted hover:border-play-purple/20'
                   }`}
                 >
                   <span className="text-xl">{cat.emoji}</span>
@@ -127,13 +127,13 @@ export const TargetSetter: React.FC<TargetSetterProps> = ({
           </div>
         </div>
 
-        <div className="play-card p-8">
-          <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-6">Pace</h3>
-          <div className="flex p-2 bg-slate-50 rounded-2xl border-2 border-white shadow-inner">
+        <div className="play-card p-8 bg-play-card border-play-border">
+          <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-play-muted mb-6">Pace</h3>
+          <div className="flex p-2 bg-play-elevated rounded-2xl border-2 border-play-border shadow-inner">
             <button
               onClick={() => onTimeframeChange('weeks')}
               className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${
-                timeframe === 'weeks' ? 'bg-white text-play-purple shadow-md' : 'text-slate-300 hover:text-slate-400'
+                timeframe === 'weeks' ? 'bg-play-card text-play-purple shadow-md' : 'text-play-muted hover:text-play-ink'
               }`}
             >
               <Clock size={14} />
@@ -142,7 +142,7 @@ export const TargetSetter: React.FC<TargetSetterProps> = ({
             <button
               onClick={() => onTimeframeChange('months')}
               className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${
-                timeframe === 'months' ? 'bg-white text-play-purple shadow-md' : 'text-slate-300 hover:text-slate-400'
+                timeframe === 'months' ? 'bg-play-card text-play-purple shadow-md' : 'text-play-muted hover:text-play-ink'
               }`}
             >
               <Clock size={14} />

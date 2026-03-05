@@ -11,7 +11,6 @@ import {
   Bell,
   Pill,
   Utensils,
-  Zap,
   Moon,
   CheckCircle2,
   ArrowRight,
@@ -24,7 +23,14 @@ import {
   Heart,
   Gift,
   PartyPopper,
-  Star
+  Star,
+  Share2,
+  Eye,
+  Zap,
+  Flame,
+  Crown,
+  Share,
+  X
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { ScoreOverview } from './components/ScoreOverview';
@@ -52,31 +58,31 @@ export default function App() {
   const [xp, setXp] = useState(1250);
   const [streak, setStreak] = useState(3);
   const [praiseMessage, setPraiseMessage] = useState('');
+  const [showOracle, setShowOracle] = useState(false);
+  const [oracleVision, setOracleVision] = useState<{ title: string, text: string, icon: string } | null>(null);
+  const [showShareModal, setShowShareModal] = useState(false);
 
   const baseScore = 63.7;
 
-  const PRAISE_MESSAGES = [
-    "You're in the top 5% of health-conscious users today!",
-    "Your cellular resilience is trending towards Elite status.",
-    "A billion-dollar body starts with this single decision.",
-    "You've unlocked a hidden metabolic advantage!",
-    "Your consistency is outperforming 92% of your peer group."
+  const ORACLE_VISIONS = [
+    { title: "The Ageless Sage", text: "In 30 years, you'll be the one hiking while others are sitting. Your future self is a legend in the making.", icon: "🧘" },
+    { title: "Metabolic Mastery", text: "Your cells are beginning to hum with the efficiency of a high-performance engine. You're unlocking a hidden gear.", icon: "⚡" },
+    { title: "The Sleep Architect", text: "Your brain is clearing out the day's fog with surgical precision. Tomorrow's focus is already being built.", icon: "🌙" },
+    { title: "Vitality Vortex", text: "You're not just living; you're radiating. People around you are catching your energy like a positive contagion.", icon: "🌀" },
+    { title: "The Longevity Pioneer", text: "You are rewriting your genetic script. The 'inevitable' decline is becoming a choice you're opting out of.", icon: "🧬" }
   ];
 
   const handleSurpraise = () => {
-    const unselected = MOCK_INTERVENTIONS.filter(i => !activeInterventions.includes(i.id));
-    if (unselected.length > 0) {
-      const random = unselected[Math.floor(Math.random() * unselected.length)];
-      toggleIntervention(random.id);
-      setPraiseMessage(PRAISE_MESSAGES[Math.floor(Math.random() * PRAISE_MESSAGES.length)]);
-      setXp(prev => prev + 50);
-      confetti({
-        particleCount: 100,
-        spread: 70,
-        origin: { y: 0.6 },
-        colors: ['#CA0F88', '#5C05A5', '#FBBF24']
-      });
-    }
+    const vision = ORACLE_VISIONS[Math.floor(Math.random() * ORACLE_VISIONS.length)];
+    setOracleVision(vision);
+    setShowOracle(true);
+    setXp(prev => prev + 100);
+    confetti({
+      particleCount: 80,
+      spread: 60,
+      origin: { y: 0.5 },
+      colors: ['#818cf8', '#f472b6', '#34d399']
+    });
   };
   
   const currentScore = useMemo(() => {
@@ -197,17 +203,17 @@ export default function App() {
                       <div className="flex gap-3">
                         <button 
                           onClick={handleSurpraise}
-                          className="play-btn bg-gradient-to-r from-play-yellow to-orange-500 text-play-bg hover:scale-105 transition-transform shadow-lg shadow-play-yellow/20 group"
+                          className="play-btn bg-gradient-to-r from-play-purple to-play-blue text-white hover:scale-105 transition-transform shadow-lg shadow-play-purple/20 group"
                         >
-                          <Sparkles size={18} className="group-hover:rotate-12 transition-transform" />
-                          Mystery Reveal
+                          <Eye size={18} className="group-hover:scale-110 transition-transform" />
+                          Health Oracle
                         </button>
                         <button 
-                          onClick={() => setMode('modeling')}
-                          className="play-btn play-btn-primary w-full md:w-auto justify-center group"
+                          onClick={() => setShowShareModal(true)}
+                          className="play-btn bg-play-elevated border border-play-border text-play-ink hover:bg-play-card transition-colors group"
                         >
-                          <Wand2 size={18} className="group-hover:translate-x-1 transition-transform" />
-                          Action Modeler
+                          <Share2 size={18} className="group-hover:rotate-12 transition-transform" />
+                          Share Rank
                         </button>
                       </div>
                     </div>
@@ -235,6 +241,7 @@ export default function App() {
                         band={getBand(currentScore)} 
                         projectedImprovement={currentScore - baseScore}
                         baseScore={baseScore}
+                        onShare={() => setShowShareModal(true)}
                       />
                     </div>
                     
@@ -705,20 +712,20 @@ export default function App() {
                                 }}
                               >
                                 <div className="flex items-center justify-between mb-4">
-                                  <span className="text-[10px] font-black text-play-purple uppercase tracking-widest">PHASE {String(index + 1).padStart(2, '0')}</span>
-                                  <span className="text-sm font-black text-play-yellow">+{action.impact.toFixed(1)} pts</span>
+                                  <span className="text-[10px] font-black text-play-purple uppercase tracking-widest">MILESTONE {String(index + 1).padStart(2, '0')}</span>
+                                  <span className="text-sm font-black text-play-mint">+{action.impact.toFixed(1)} pts</span>
                                 </div>
                                 <h4 className="text-xl font-black text-play-ink mb-2">{action.name}</h4>
-                                <div className="inline-block px-3 py-1 bg-slate-100 rounded-lg text-[10px] font-bold text-slate-500 uppercase mb-6">
+                                <div className="inline-block px-3 py-1 bg-play-elevated rounded-lg text-[10px] font-bold text-play-muted uppercase mb-6">
                                   {action.category}
                                 </div>
                                 
                                 {action.touchPoints && (
                                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
                                     {action.touchPoints.map((tp, i) => (
-                                      <div key={i} className="p-3 bg-slate-50 rounded-xl border border-slate-100 text-left">
+                                      <div key={i} className="p-3 bg-play-bg rounded-xl border border-play-border text-left">
                                         <div className="text-[9px] font-black text-play-purple uppercase tracking-tighter mb-1">{tp.title}</div>
-                                        <p className="text-[10px] font-bold text-slate-500 leading-tight">{tp.description}</p>
+                                        <p className="text-[10px] font-bold text-play-muted leading-tight">{tp.description}</p>
                                       </div>
                                     ))}
                                   </div>
@@ -726,20 +733,39 @@ export default function App() {
                               </div>
                             </div>
 
-                            {/* Center Node */}
+                            {/* Center Node - Milestone Orb */}
                             <div className="relative flex items-center justify-center">
                               <motion.div 
-                                animate={{ y: [0, -5, 0] }}
-                                transition={{ repeat: Infinity, duration: 2, delay: index * 0.5 }}
-                                className="w-12 h-12 rounded-full bg-white shadow-xl border-4 border-play-bg flex items-center justify-center z-20"
+                                animate={{ 
+                                  scale: [1, 1.1, 1],
+                                  boxShadow: [
+                                    "0 0 0px rgba(129, 138, 248, 0)",
+                                    "0 0 20px rgba(129, 138, 248, 0.4)",
+                                    "0 0 0px rgba(129, 138, 248, 0)"
+                                  ]
+                                }}
+                                transition={{ repeat: Infinity, duration: 3, delay: index * 0.5 }}
+                                className="w-14 h-14 rounded-full bg-play-card shadow-xl border-4 border-play-elevated flex flex-col items-center justify-center z-20 group cursor-help"
                               >
-                                <div className={`w-4 h-4 rounded-full ${index === 0 ? 'bg-play-yellow' : index === 1 ? 'bg-play-purple' : 'bg-play-pink'}`} />
+                                <div className={`w-3 h-3 rounded-full ${index === 0 ? 'bg-play-yellow' : index === 1 ? 'bg-play-purple' : 'bg-play-pink'}`} />
+                                <div className="absolute -bottom-8 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+                                   <span className="text-[8px] font-black text-play-ink uppercase bg-play-elevated px-2 py-1 rounded border border-play-border">Unlock Benefit</span>
+                                </div>
                               </motion.div>
                               {/* Connector for mobile */}
-                              <div className="absolute top-12 bottom-0 w-1 bg-slate-100 md:hidden" />
+                              <div className="absolute top-14 bottom-0 w-1 bg-play-border md:hidden" />
                             </div>
 
-                            <div className="flex-1 hidden md:block" />
+                            <div className="flex-1 hidden md:block">
+                              <div className={`p-4 ${isEven ? 'text-left' : 'text-right'}`}>
+                                <div className="text-[10px] font-black text-play-mint uppercase tracking-widest mb-1">Benefit Unlocked</div>
+                                <p className="text-xs text-play-muted font-medium">
+                                  {index === 0 ? "20% higher morning energy levels." : 
+                                   index === 1 ? "Reduced inflammatory markers by 15%." : 
+                                   "Enhanced cognitive focus during deep work."}
+                                </p>
+                              </div>
+                            </div>
                           </motion.div>
                         );
                       })}
@@ -933,6 +959,135 @@ export default function App() {
 
         </div>
       </div>
+
+      {/* Health Oracle Modal */}
+      <AnimatePresence>
+        {showOracle && oracleVision && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowOracle(false)}
+              className="absolute inset-0 bg-play-bg/90 backdrop-blur-xl"
+            />
+            <motion.div 
+              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 20 }}
+              className="relative w-full max-w-lg bg-play-card border border-play-purple/30 rounded-[3rem] p-10 text-center overflow-hidden"
+            >
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-play-purple via-play-pink to-play-blue" />
+              <div className="absolute -top-24 -left-24 w-64 h-64 bg-play-purple/10 rounded-full blur-3xl" />
+              <div className="absolute -bottom-24 -right-24 w-64 h-64 bg-play-pink/10 rounded-full blur-3xl" />
+              
+              <div className="relative z-10">
+                <div className="w-24 h-24 bg-play-elevated rounded-[2.5rem] flex items-center justify-center text-5xl mx-auto mb-8 shadow-2xl border border-play-border">
+                  {oracleVision.icon}
+                </div>
+                <div className="text-[10px] font-black text-play-purple uppercase tracking-[0.3em] mb-4">The Oracle Vision</div>
+                <h2 className="text-3xl font-black text-play-ink mb-6 tracking-tight">{oracleVision.title}</h2>
+                <p className="text-lg font-bold text-play-muted leading-relaxed italic mb-10">
+                  "{oracleVision.text}"
+                </p>
+                <div className="flex flex-col gap-4">
+                  <div className="flex items-center justify-center gap-2 text-play-mint">
+                    <Zap size={16} />
+                    <span className="text-xs font-black uppercase tracking-widest">+100 Insight XP</span>
+                  </div>
+                  <button 
+                    onClick={() => setShowOracle(false)}
+                    className="play-btn play-btn-primary justify-center py-4"
+                  >
+                    I Accept This Vision
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Share Snapshot Modal */}
+      <AnimatePresence>
+        {showShareModal && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowShareModal(false)}
+              className="absolute inset-0 bg-play-bg/90 backdrop-blur-xl"
+            />
+            <motion.div 
+              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 20 }}
+              className="relative w-full max-w-md bg-play-card border border-play-border rounded-[2.5rem] overflow-hidden"
+            >
+              {/* Shareable Card Content */}
+              <div className="p-8 bg-gradient-to-br from-play-card to-play-elevated">
+                <div className="flex justify-between items-start mb-10">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-play-pink flex items-center justify-center text-white shadow-lg shadow-play-pink/20">
+                      <Crown size={20} />
+                    </div>
+                    <div>
+                      <div className="text-[10px] font-black text-play-ink uppercase tracking-widest">Deep Holistics</div>
+                      <div className="text-[8px] font-black text-play-muted uppercase tracking-widest">Global Rank #1,284</div>
+                    </div>
+                  </div>
+                  <div className="px-3 py-1 bg-play-yellow/10 border border-play-yellow/20 rounded-full flex items-center gap-1">
+                    <Flame size={12} className="text-play-yellow" />
+                    <span className="text-[10px] font-black text-play-yellow">{streak} DAY STREAK</span>
+                  </div>
+                </div>
+
+                <div className="text-center mb-10">
+                  <div className="text-[10px] font-black text-play-muted uppercase tracking-[0.2em] mb-2">Health Score</div>
+                  <div className="text-8xl font-black gradient-text tracking-tighter">{Math.round(currentScore)}</div>
+                  <div className="mt-2 inline-block px-4 py-1.5 bg-play-mint/10 text-play-mint rounded-full text-[10px] font-black uppercase tracking-widest">
+                    Elite Status Unlocked
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4 mb-8">
+                  <div className="p-4 bg-play-bg/50 rounded-2xl border border-play-border text-center">
+                    <div className="text-[8px] font-black text-play-muted uppercase tracking-widest mb-1">XP Level</div>
+                    <div className="text-lg font-black text-play-ink">{Math.floor(xp / 1000)}</div>
+                  </div>
+                  <div className="p-4 bg-play-bg/50 rounded-2xl border border-play-border text-center">
+                    <div className="text-[8px] font-black text-play-muted uppercase tracking-widest mb-1">League</div>
+                    <div className="text-lg font-black text-play-yellow">Gold</div>
+                  </div>
+                </div>
+
+                <div className="text-center">
+                  <p className="text-[10px] font-bold text-play-muted italic">"Your future self is thanking you for today's decisions."</p>
+                </div>
+              </div>
+
+              <div className="p-6 bg-play-elevated flex flex-col gap-3">
+                <button 
+                  onClick={() => {
+                    alert('Snapshot copied to clipboard! (Simulated)');
+                    setShowShareModal(false);
+                  }}
+                  className="play-btn play-btn-primary justify-center w-full"
+                >
+                  <Share size={18} /> Copy Share Link
+                </button>
+                <button 
+                  onClick={() => setShowShareModal(false)}
+                  className="text-[10px] font-black text-play-muted uppercase tracking-widest hover:text-play-ink transition-colors"
+                >
+                  Close
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

@@ -4,18 +4,18 @@
 @theme {
   --font-sans: "Outfit", ui-sans-serif, system-ui, sans-serif;
   
-  /* Deep Holistics Design System */
-  --color-play-purple: #5C05A5;
-  --color-play-pink: #CA0F88;
-  --color-play-blue: #4900FF;
-  --color-play-mint: #71F0FF;
-  --color-play-yellow: #FBBF24;
-  --color-play-bg: #040404;
-  --color-play-card: #0C0C0C;
-  --color-play-elevated: #121212;
-  --color-play-ink: #F1F3F6;
-  --color-play-muted: rgba(241, 243, 246, 0.5);
-  --color-play-border: rgba(241, 243, 246, 0.08);
+  /* Deep Holistics Design System - Refined Galactic Palette */
+  --color-play-purple: #818cf8;
+  --color-play-pink: #f472b6;
+  --color-play-blue: #60a5fa;
+  --color-play-mint: #34d399;
+  --color-play-yellow: #fbbf24;
+  --color-play-bg: #020617;
+  --color-play-card: #0f172a;
+  --color-play-elevated: #1e293b;
+  --color-play-ink: #f8fafc;
+  --color-play-muted: rgba(248, 250, 252, 0.5);
+  --color-play-border: rgba(248, 250, 252, 0.1);
 }
 
 @layer base {

@@ -1,16 +1,17 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { getBandColor } from '../data';
-import { ArrowRight, Star } from 'lucide-react';
+import { ArrowRight, Star, Share2 } from 'lucide-react';
 
 interface ScoreOverviewProps {
   score: number;
   band: string;
   projectedImprovement?: number;
   baseScore?: number;
+  onShare?: () => void;
 }
 
-export const ScoreOverview: React.FC<ScoreOverviewProps> = ({ score, band, projectedImprovement, baseScore = 63.7 }) => {
+export const ScoreOverview: React.FC<ScoreOverviewProps> = ({ score, band, projectedImprovement, baseScore = 63.7, onShare }) => {
   const healthyTarget = 70.0;
   const remaining = Math.max(0, healthyTarget - score);
   const isSuperstar = score >= 85;
@@ -85,12 +86,20 @@ export const ScoreOverview: React.FC<ScoreOverviewProps> = ({ score, band, proje
                 />
               ))}
             </div>
+          <div className="flex items-center gap-2">
+            <button 
+              onClick={onShare}
+              className="w-8 h-8 flex items-center justify-center bg-play-elevated border border-play-border rounded-lg text-play-muted hover:text-play-ink transition-colors"
+            >
+              <Share2 size={14} />
+            </button>
             <div 
               className="px-3 py-1 rounded-full text-[10px] font-black text-white uppercase tracking-widest"
               style={{ backgroundColor: getBandColor(band) }}
             >
               {band}
             </div>
+          </div>
           </div>
         </div>
       </div>
